@@ -1,6 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Libro } from '../models/libro.model';
 import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn } from '@angular/forms';
+import { fromEvent } from 'rxjs';
+import { ajax, AjaxResponse } from 'rxjs/ajax';
+import { map , filter , debounceTime , distinctUntilChanged , switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-libro',
@@ -15,6 +18,8 @@ export class FormLibroComponent implements OnInit {
 
   minLongitud = 3;
 
+  searchResults: string[];
+
   constructor(fb : FormBuilder) { 
     this.onItemAdded = new EventEmitter();
     this.fg = fb.group({
@@ -28,6 +33,17 @@ export class FormLibroComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let elemNombre = <HTMLInputElement>document.getElementById("nombre");
+    fromEvent(elemNombre,"input")
+    .pipe(
+      map((e:KeyboardEvent) => (e.target as HTMLInputElement).value),
+      filter(text => text.length > 2),
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap(() => ajax("/assets/datos.json"))
+    ).subscribe(AjaxResponse => {
+      this.searchResults = AjaxResponse.response;
+    });
   }
 
   guardar(nombre: string ,autor: string, imagenUrl: string ): boolean{
