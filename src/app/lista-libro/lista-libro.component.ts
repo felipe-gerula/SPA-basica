@@ -15,9 +15,14 @@ export class ListaLibroComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  guardar(nombre : string , url : string ,autor : string):boolean{
-    this.libros.push(new Libro(nombre,autor,url));
+  agregado(l : Libro){
+    this.libros.push(l);
     console.log(this.libros);
     return false;
+  }
+
+  elegido(l : Libro){
+    this.libros.forEach(function (x) {x.setSelected(false);});
+    l.setSelected(true);
   }
 }

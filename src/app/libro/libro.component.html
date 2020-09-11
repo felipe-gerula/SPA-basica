@@ -3,7 +3,21 @@
     <img src={{libro.imagenUrl}} alt="">
   </div>
   <div class="card-desc">
-    <h3>{{libro.nombre}}</h3>
+    <h3>{{position}}</h3>
     <h6>{{libro.autor}}</h6>
+    <p>Info</p>
+    <ul>
+      <li *ngFor="let s of libro.info">
+        <span [ngSwitch]="s">
+          <i *ngSwitchCase="'tapa dura'" style="color : red;">{{s}}</i>
+          <i *ngSwitchDefault>{{s}}</i>          
+        </span>
+      </li>
+    </ul>
+    <a href="#" class="btn-card" (click)="ir()">Ir!</a>
+    <span [style.display]="libro.isSelected() ? '' : 'none' ">
+      <span ngNonBindable>Preferido</span>
+    </span>
+    <a [routerLink]="['/libro']">Ver Detalles</a>
   </div>
 </div>
