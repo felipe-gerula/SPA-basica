@@ -1,5 +1,9 @@
+import { state } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { AppState } from '../app.module';
+import { ElegidoFavoritoAction, NuevoLibroAction } from '../models/libro-state.model';
 import {Libro} from '../models/libro.model';
 
 @Component({
@@ -9,9 +13,18 @@ import {Libro} from '../models/libro.model';
 })
 export class ListaLibroComponent implements OnInit {
 
+  updates: string[];
   libros : Libro[];
   current: Subject<Libro> = new BehaviorSubject<Libro>(null);
-  constructor() {this.libros = [] }
+  constructor(private store: Store<AppState>) {
+    this.libros = [] 
+    // this.store.select(state => state.libros.favorito).subscribe(data => {
+    //   const fav = data;
+    //   if (data != null) {
+    //     this.updates.push(data.nombre);
+    //   }
+    // });
+  }
 
   ngOnInit(): void {
   }
@@ -29,6 +42,6 @@ export class ListaLibroComponent implements OnInit {
   }
 
   subscribeOnChange(fn){
-    this.current.subscribe(fn);
+    this.current.subscribe(fn); 
   }
 }

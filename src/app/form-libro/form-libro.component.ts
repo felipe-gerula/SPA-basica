@@ -46,8 +46,8 @@ export class FormLibroComponent implements OnInit {
     });
   }
 
-  guardar(nombre: string ,autor: string, imagenUrl: string ): boolean{
-    let d = new Libro(nombre , autor ,imagenUrl );
+  guardar(nombre: string ,autor: string, imagenUrl: string , votes :number): boolean{
+    let d = new Libro(nombre , autor ,imagenUrl,votes);
     this.onItemAdded.emit(d);
     return false;
   }
